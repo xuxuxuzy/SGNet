@@ -3,25 +3,25 @@ import torch.nn.functional as F
 import numpy as np
 import os, argparse
 from scipy import misc
-from lib.pvt2 import PolypPVT
+from lib.pvt2 import SGNet
 from utils.dataloader import test_dataset
 import cv2
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--testsize', type=int, default=352, help='testing size')
-    parser.add_argument('--pth_path', type=str, default='/home/star/xzy/Polyp-PVT-main/model_pth/114PolypPVT.pth')
+    parser.add_argument('--pth_path', type=str, default='')
     opt = parser.parse_args()
     torch.cuda.set_device(1)  # set your gpu device
-    model = PolypPVT()
+    model = SGNet()
     model.load_state_dict(torch.load(opt.pth_path))
     model.cuda()
     model.eval()
     for _data_name in ['CVC-300', 'CVC-ClinicDB', 'Kvasir', 'CVC-ColonDB', 'ETIS-LaribPolypDB']:
 
         ##### put data_path here #####
-        # data_path = '/home/star/xzy/VM-UNet-main/data/polyp/TestDataset/{}'.format(_data_name)
-        data_path = '/home/star/xzy/VM-UNet-main/data/polyp/Test3/{}'.format(_data_name)
+        # data_path = ''.format(_data_name)
+        data_path = ''.format(_data_name)
         ##### save_path #####
         save_path = './test/{}/'.format(_data_name)
 
