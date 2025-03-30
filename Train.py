@@ -3,7 +3,7 @@ from torch.autograd import Variable
 import os
 import argparse
 from datetime import datetime
-from lib.pvt2 import PolypPVT
+from lib.pvt2 import SGNet
 from utils.dataloader import get_loader, test_dataset
 from utils.utils import clip_gradient, adjust_lr, AvgMeter,adjust_lr_d
 import torch.nn.functional as F
@@ -142,7 +142,7 @@ def train(train_loader, model, optimizer, epoch, test_path , edge_loss):
     if not os.path.exists(save_path):
         os.makedirs(save_path)
     # if epoch > 50 :
-    #     torch.save(model.state_dict(), save_path +str(epoch)+ 'PolypPVT.pth')
+    #     torch.save(model.state_dict(), save_path +str(epoch)+ 'SGNet.pth')
     # choose the best model
 
     global dict_plot
@@ -163,8 +163,8 @@ def train(train_loader, model, optimizer, epoch, test_path , edge_loss):
         mean_dice_list.append(meandice)
         if meandice > best:
             best = meandice
-            torch.save(model.state_dict(), save_path + 'PolypPVT.pth')
-            # torch.save(model.state_dict(), save_path +str(epoch)+ 'PolypPVT-best.pth')
+            torch.save(model.state_dict(), save_path + 'SGNet.pth')
+            # torch.save(model.state_dict(), save_path +str(epoch)+ 'SGNet-best.pth')
             print('##############################################################################best', best)
             logging.info('##############################################################################best:{}'.format(best))
 
@@ -217,7 +217,7 @@ if __name__ == '__main__':
 
     name = ['CVC-300', 'CVC-ClinicDB', 'Kvasir', 'CVC-ColonDB', 'ETIS-LaribPolypDB', 'test']
     ##################model_name#############################
-    model_name = 'PolypPVT'
+    model_name = 'SGNet'
     ###############################################
     parser = argparse.ArgumentParser()
 
@@ -266,7 +266,7 @@ if __name__ == '__main__':
 
     # ---- build models ----
     torch.cuda.set_device(0)  # set your gpu device
-    model = PolypPVT().cuda()
+    model = SGNet().cuda()
 
     best = 0
 
