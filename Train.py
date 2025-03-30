@@ -14,7 +14,6 @@ import logging
 import matplotlib.pyplot as plt
 
 
-# 记录训练和验证损失
 train_loss_list = []
 mean_dice_list = []
 
@@ -41,8 +40,8 @@ def test(model, path, dataset):
     num1 = len(os.listdir(gt_root))
     test_loader = test_dataset(image_root, gt_root, 352)
     DSC = 0.0
-    # test_loss = 0.0  # 记录验证损失
-    # num_batches = 0  # 记录batch的数量
+    # test_loss = 0.0  
+    # num_batches = 0  
     for i in range(num1):
         image, gt, name = test_loader.load_data()
         gt = np.asarray(gt, np.float32)
@@ -69,12 +68,11 @@ def test(model, path, dataset):
         dice = float(dice)
         DSC = DSC + dice
 
-        # 计算损失
         # pred_tensor = torch.tensor(res, dtype=torch.float32).cuda().unsqueeze(0).unsqueeze(0)
         # gt_tensor = torch.tensor(gt, dtype=torch.float32).cuda().unsqueeze(0).unsqueeze(0)
         # loss = structure_loss(pred_tensor, gt_tensor)
         # test_loss += loss.item()
-        # num_batches += 1  # 记录批次数量
+        # num_batches += 1  
     # avg_test_loss = test_loss / num_batches if num_batches > 0 else 0
 
     return DSC / num1
@@ -86,7 +84,7 @@ def train(train_loader, model, optimizer, epoch, test_path , edge_loss):
     global best
     size_rates = [0.75, 1, 1.25] 
     loss_P1_record = AvgMeter()
-    epoch_loss = 0.0  # 记录整个 epoch 的损失
+    epoch_loss = 0.0 
     # loss_record = AvgMeter()
     for i, pack in enumerate(train_loader, start=1):
         for rate in size_rates:
@@ -147,7 +145,7 @@ def train(train_loader, model, optimizer, epoch, test_path , edge_loss):
 
     global dict_plot
    
-    test1path = '/home/star/xzy/VM-UNet-main/data/polyp/TestDataset/'
+    test1path = ''
     if (epoch + 1) % 1 == 0:
         sum = 0.000000
         for dataset in ['CVC-300', 'CVC-ClinicDB', 'Kvasir', 'CVC-ColonDB', 'ETIS-LaribPolypDB']:
@@ -157,7 +155,7 @@ def train(train_loader, model, optimizer, epoch, test_path , edge_loss):
             print(dataset, ': ', dataset_dice)
             dict_plot[dataset].append(dataset_dice)
         # meandice = test(model, test_path, 'test')
-        # val_loss_list.append(avg_test_loss)  # 存储平均验证损失
+        # val_loss_list.append(avg_test_loss) 
         # dict_plot['test'].append(meandice)
         meandice = sum / 5
         mean_dice_list.append(meandice)
@@ -185,7 +183,7 @@ def train(train_loader, model, optimizer, epoch, test_path , edge_loss):
 def plot_train():
     plt.figure(figsize=(8, 6))
 
-    # 绘制训练损失和验证损失曲线
+  
     plt.plot(train_loss_list, label="Train Loss", color="blue", linestyle="-")
 
     plt.xlabel("Epoch")
@@ -199,7 +197,7 @@ def plot_train():
 
     plt.figure(figsize=(8, 6))
 
-    # 绘制训练损失和验证损失曲线
+  
     plt.plot(mean_dice_list, label="Test Mean Dice", color="red", linestyle="-")
 
     plt.xlabel("Epoch")
@@ -249,15 +247,15 @@ if __name__ == '__main__':
                         default=50, help='every n epochs decay learning rate')
 
     parser.add_argument('--train_path', type=str,
-                        default='/home/star/xzy/VM-UNet-main/data/polyp/TrainDataset/',
+                        default='',
                         help='path to train dataset')
 
     parser.add_argument('--test_path', type=str,
-                        default='/home/star/xzy/VM-UNet-main/data/polyp/TestDataset/',
+                        default='',
                         help='path to testing Kvasir dataset')
 
     parser.add_argument('--train_save', type=str,
-                        default='./model_pth/'+'PVTPoly'+'/')
+                        default='./model_pth/'+'SGNet'+'/')
 
     opt = parser.parse_args()
     logging.basicConfig(filename='train.log',
