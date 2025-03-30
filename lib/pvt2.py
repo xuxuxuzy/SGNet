@@ -250,9 +250,9 @@ class Attention_block(nn.Module):
         psi = self.psi(psi)
         # return x+g
         return x1* psi+g1
-class PolypPVT(nn.Module):
+class SGNet(nn.Module):
     def __init__(self, channel=32):
-        super(PolypPVT, self).__init__()
+        super(SGNet, self).__init__()
 
         self.backbone = pvt_v2_b2()  # [64, 128, 320, 512]
         path = './pretrained_pth/pvt_v2_b2.pth'
@@ -455,7 +455,7 @@ class PolypPVT(nn.Module):
 
 
 if __name__ == '__main__':
-    model = PolypPVT().cuda()
+    model = SGNet().cuda()
     input_tensor = torch.randn(1, 3, 352, 352).cuda()
 
     prediction1, prediction2 = model(input_tensor)
